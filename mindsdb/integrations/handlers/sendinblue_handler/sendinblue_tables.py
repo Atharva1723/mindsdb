@@ -59,3 +59,28 @@ class EmailCampaignsTable(APITable):
         email_campaigns_api_instance = sib_api_v3_sdk.EmailCampaignsApi(connection)
         email_campaigns = email_campaigns_api_instance.get_email_campaigns(**kwargs)
         return [email_campaign for  email_campaign in email_campaigns.campaigns]
+    
+    def insert(self, query: ast.Insert) -> None:
+        """Inserts data into the Sendinblue Email Campaigns Table.
+
+        Parameters
+        ----------
+        query : ast.Insert
+        Given SQL INSERT query
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        ValueError
+        If the query contains an unsupported condition
+        """
+        insert_statement_parser = INSERTQueryParser(
+          query,
+          supported_columns=['name', 'subject', 'content', 'recipients'],
+          mandatory_columns=['name'],  # Adjust as needed
+          all_mandatory=False
+        )
+    
